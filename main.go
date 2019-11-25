@@ -1,7 +1,7 @@
 package main
 
 import "github.com/gin-gonic/gin"
-import "database"
+import "GoPratice/database"
 
 func main() {
 	database.Init()
