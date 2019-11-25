@@ -1,10 +1,14 @@
 package main
 
-import "github.com/gin-gonic/gin"
-import "GoPratice/database"
+import (
+	"GoPratice/database"
+	"fmt"
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	database.Init()
+	err := database.Init()
+	fmt.Print(err)
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 
