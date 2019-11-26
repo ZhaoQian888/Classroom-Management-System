@@ -1,4 +1,4 @@
-module GoPratice
+module Classroom-Management-System
 
 go 1.13
 

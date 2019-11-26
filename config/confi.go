@@ -1,7 +1,7 @@
 package config
 
 import (
-	"GoPratice/model"
+	"Classroom-Management-System/model"
 	"github.com/joho/godotenv"
 	"os"
 )

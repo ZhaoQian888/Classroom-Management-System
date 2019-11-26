@@ -1,8 +1,8 @@
 package main
 
 import (
-	"GoPratice/config"
-	"GoPratice/router"
+	"Classroom-Management-System/config"
+	"Classroom-Management-System/router"
 )
 
 func main() {
