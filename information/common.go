@@ -1,8 +1,9 @@
 package information
 
+// Response 基础回应
 type Response struct {
-	Status string      `json:"status"`
-	data   interface{} `json:"data"`
+	Status int         `json:"status"`
+	Data   interface{} `json:"data"`
 	Msg    string      `json:"msg"`
-	Error  string      `json:error`
+	Error  string      `json:"error"`
 }
