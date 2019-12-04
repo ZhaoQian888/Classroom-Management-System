@@ -1,11 +1,11 @@
 package api
 
 import (
+	"Classroom-Management-System/conf"
+	"Classroom-Management-System/information"
+	"Classroom-Management-System/model"
 	"encoding/json"
 	"fmt"
-	"Classroom-Management-System/conf"
-	"Classroom-Management-System/model"
-	"Classroom-Management-System/information"
 
 	"github.com/gin-gonic/gin"
 	validator "gopkg.in/go-playground/validator.v8"

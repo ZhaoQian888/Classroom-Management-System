@@ -1,28 +1,29 @@
 package middleware
 
 import (
+	"Classroom-Management-System/information"
+	"Classroom-Management-System/model"
+
 	"github.com/gin-gonic/gin"
 )
 
 // LoginRequired 中间件，对于需要登陆之后才能操作的使用登陆验证
 func LoginRequired() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Next()
-		// if logincookie, _ := c.Get("logincookie"); logincookie != nil {
-		// 	if ok := CheckcookiedValid(logincookie); ok {
-		// 		c.Next()
-		// 		return
-		// 	}
-		// }
-		// c.JSON(200, information.Response{
-		// 	Status: 4001,
-		// 	Msg:    "cookie过期或者没有，需要登陆",
-		// })
+		user, _ := c.Get("user")
+		if user != nil {
+			if _, ok := user.(*model.User); ok {
+				c.Next()
+				return
+			}
+		} else {
+			c.JSON(200, information.Response{
+				Status: 20001,
+				Msg:    "需要登陆",
+			})
+			c.Abort()
+		}
 
 	}
 
 }
-
-// func CheckcookiedValid(cookie string) bool {
-
-// }

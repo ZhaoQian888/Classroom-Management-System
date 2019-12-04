@@ -3,7 +3,8 @@ package api
 import (
 	"Classroom-Management-System/information"
 	"Classroom-Management-System/service"
-	"fmt"
+
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,23 +12,30 @@ import (
 func UserLogin(c *gin.Context) {
 	var userinfo service.UserLogInService
 	if err := c.ShouldBind(&userinfo); err != nil {
+		// 这里处理前段传过来的信息不符
 		if !userinfo.CheckUserValid() {
-			c.JSON(400, information.Response{
-				Status: 13000,
+			c.JSON(200, information.Response{
+				Status: 11001,
 				Msg:    "用户名或用户密码不合法",
 			})
+		} else {
+			c.JSON(200, information.Response{
+				Status: 11002,
+				Msg:    "用户信息未知错误",
+			})
 		}
-		//此处放错误处理
 	} else {
 		user, err := userinfo.LogIn()
 		if err != nil {
-			fmt.Println("错误:", err)
+			c.JSON(200, err)
 		} else {
-			fmt.Println("eee呵呵呵呵呵呵呵呵呵呵呵呵呵")
-			c.SetCookie("login", "test", 3600, "/", "localhost", true, true)
-			//返回前段所需用户信息
+			//此处正确，返回浏览器一个cookie
+			s := sessions.Default(c)
+			s.Clear()
+			s.Set("user_id", user.Identity)
+			s.Save()
+			//并且把前段所需用户信息返回
 			c.JSON(200, information.CreateUserRseponse(user))
-
 		}
 	}
 
@@ -37,14 +45,20 @@ func UserLogin(c *gin.Context) {
 func UserRegister(c *gin.Context) {
 	var userinfo service.UserRegisterService
 	if err := c.ShouldBind(&userinfo); err != nil {
-		fmt.Println(userinfo)
-		c.JSON(304, information.CreateErrorResponse(err))
+		c.JSON(200, information.Response{
+			Status: 10005,
+			Msg:    "用户信息不合法",
+		})
 	} else {
 		user, err := userinfo.Register()
 		if err != nil {
-			c.JSON(400, err)
+			c.JSON(200, err)
 		} else {
-			c.SetCookie("login", "fdffdsfsdffsd", 3600, "/", "localhost", true, true)
+			s := sessions.Default(c)
+			s.Clear()
+			s.Set("user_id", user.Identity)
+			s.Save()
+
 			c.JSON(200, information.CreateUserRseponse(user))
 		}
 	}
