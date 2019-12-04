@@ -28,7 +28,7 @@ func BuildUser(u model.User) User {
 // CreateUserRseponse 生成用户回应信息
 func CreateUserRseponse(u model.User) UserResponse {
 	return UserResponse{
-		Status: 1344,
+		Status: 0,
 		Msg:    "用户信息",
 		Data:   BuildUser(u),
 	}

@@ -13,7 +13,7 @@ func SetRouter() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 	router.Use(middleware.Cors())
-	user := router.Group("/user")
+	user := router.Group("/gin/user")
 	user.Use(middleware.LoginRequired())
 	{
 		user.POST("/register", api.UserRegister)

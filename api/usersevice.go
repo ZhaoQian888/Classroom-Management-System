@@ -37,6 +37,7 @@ func UserLogin(c *gin.Context) {
 func UserRegister(c *gin.Context) {
 	var userinfo service.UserRegisterService
 	if err := c.ShouldBind(&userinfo); err != nil {
+		fmt.Println(userinfo)
 		c.JSON(304, information.CreateErrorResponse(err))
 	} else {
 		user, err := userinfo.Register()

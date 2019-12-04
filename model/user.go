@@ -12,6 +12,7 @@ type User struct {
 	Username string
 	Password string
 	Class    string
+	Email    string
 }
 
 // SetPassword 生成加密密码
