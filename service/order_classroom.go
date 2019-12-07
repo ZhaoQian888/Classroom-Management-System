@@ -16,13 +16,24 @@ type ClassRoomOrder struct {
 }
 
 // Order 完成预定动作
-func (o *ClassRoomOrder) Order() *information.Response {
+func (o *ClassRoomOrder) Order(id interface{}) *information.Response {
+	var user model.User
+	count := 0
+	model.DB.Where("identity = ?", id).First(&user).Count(&count)
+	identity := user.Identity
+	if count == 0 || identity == 0 {
+		return &information.Response{
+			Status: 30005,
+			Msg:    "身份验证失败",
+		}
+	}
 	order := model.ClassRoomOrder{
 		RoomUser:     o.RoomUser,
 		OrderTime:    o.OrderTime,
 		UseTimeStart: o.UseTimeStart,
 		UseTimeEnd:   o.UseTimeEnd,
 		UserName:     o.UserName,
+		Identity:     identity,
 	}
 	err := model.DB.Create(&order).Error
 	if err != nil {

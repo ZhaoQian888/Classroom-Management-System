@@ -9,6 +9,6 @@ type ClassRoom struct {
 	gorm.Model
 	BuildingName   string
 	BuildingNumber uint8
-	Floor          int
-	RoomNumber     int
+	Floor          uint8
+	RoomNumber     uint64
 }

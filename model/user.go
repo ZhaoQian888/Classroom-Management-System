@@ -17,7 +17,7 @@ type User struct {
 	Password string
 	Class    string
 	Email    string
-	Identity int
+	Identity uint64
 }
 
 // SetPassword 生成加密密码
@@ -52,10 +52,3 @@ func GetUser(id interface{}) (User, error) {
 	return u, err.Error
 
 }
-
-// f err := model.DB.Where("username=?", u.Username).First(&user).Error; err != nil {
-// 	return user, &information.Response{
-// 		Status: 11003,
-// 		Msg:    "用户名或者密码错误",
-// 	}
-// }

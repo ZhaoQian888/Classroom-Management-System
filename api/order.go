@@ -4,6 +4,7 @@ import (
 	"Classroom-Management-System/information"
 	"Classroom-Management-System/service"
 
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +17,9 @@ func OrderClassroom(c *gin.Context) {
 			Msg:    "预定信息无法序列化，请检查错误",
 		})
 	} else {
-		res := order.Order()
+		s := sessions.Default(c)
+		id := s.Get("user_id")
+		res := order.Order(id)
 		c.JSON(200, res)
 	}
 }

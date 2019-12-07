@@ -24,6 +24,20 @@ type UserRegisterService struct {
 // |class|必要，最短2个字符，最长30个字符|
 // |email|必要，最短6个字符，最长25个字符|
 
+// CreateIdentity 生成验证id
+func CreateIdentity() uint64 {
+	id := time.Now().Nanosecond()
+	for true {
+		count := 0
+		model.DB.Model(&model.User{}).Where("identity=?", id).Count(&count)
+		if count == 0 {
+			break
+		}
+	}
+	return uint64(id)
+
+}
+
 // Register 完成注册动作
 func (u *UserRegisterService) Register() (model.User, *information.Response) {
 	user := model.User{
@@ -31,7 +45,7 @@ func (u *UserRegisterService) Register() (model.User, *information.Response) {
 		Username: u.Username,
 		Class:    u.Class,
 		Email:    u.Email,
-		Identity: time.Now().Nanosecond(),
+		Identity: CreateIdentity(),
 	}
 	res := u.Valid()
 	if res != nil {

@@ -10,4 +10,6 @@ type ClassRoomOrder struct {
 	OrderTime    int64
 	UseTimeStart int64
 	UseTimeEnd   int64
+	Identity     uint64
+	RoomNumber   uint64
 }
