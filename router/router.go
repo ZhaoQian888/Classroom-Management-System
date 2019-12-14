@@ -15,7 +15,7 @@ func SetRouter() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	// router.Use(middleware.Cors())
+	router.Use(middleware.Cors())
 	router.Use(middleware.Session((os.Getenv("SESSION_SECRET"))))
 	router.Use(middleware.CurrentUser())
 
