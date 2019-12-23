@@ -27,3 +27,21 @@ func LoginRequired() gin.HandlerFunc {
 	}
 
 }
+
+// AdminRequired 管理员登录中间件
+func AdminRequired() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		user, _ := c.Get("user")
+		u, _ := user.(*model.User)
+		if u.Username == "administrator" {
+			c.Next()
+
+		} else {
+			c.JSON(200, information.Response{
+				Status: 50001,
+				Msg:    "需要管理员身份",
+			})
+			c.Abort()
+		}
+	}
+}

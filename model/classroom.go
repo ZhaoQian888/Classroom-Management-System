@@ -15,8 +15,8 @@ type entity interface {
 // Building 是一个教学楼实体
 type Building struct {
 	gorm.Model
-	BuildingNumber uint8  `gorm:"primary_key"`
-	BuildingName   string `gorm:"not null"`
+	BuildingNumber uint8  `form:"building_number"  json:"building_number"  gorm:"primary_key" `
+	BuildingName   string `form:"building_name"    json:"building_name"    gorm:"not null"`
 }
 
 // ClassRoom 是一个教室实体

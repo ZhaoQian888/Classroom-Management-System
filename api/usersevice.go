@@ -35,7 +35,11 @@ func UserLogin(c *gin.Context) {
 			s.Set("user_id", user.Identity)
 			s.Save()
 			//并且把前段所需用户信息返回
-			c.JSON(200, information.CreateUserRseponse(user))
+			c.JSON(200, information.Response{
+				Status: 0,
+				Msg:    "登录成功",
+				Data:   user,
+			})
 		}
 	}
 
@@ -59,7 +63,11 @@ func UserRegister(c *gin.Context) {
 			s.Set("user_id", user.Identity)
 			s.Save()
 
-			c.JSON(200, information.CreateUserRseponse(user))
+			c.JSON(200, information.Response{
+				Status: 0,
+				Msg:    "注册成功",
+				Data:   user,
+			})
 		}
 	}
 

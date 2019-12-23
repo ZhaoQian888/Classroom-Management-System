@@ -21,13 +21,22 @@ func SetRouter() *gin.Engine {
 
 	user := router.Group("/gin/user")
 	{
+
 		user.POST("/register", api.UserRegister)
 		user.POST("/login", api.UserLogin)
 	}
 	order := router.Group("/gin/order")
 	{
 		order.Use(middleware.LoginRequired())
+		order.Use(middleware.LoginRequired())
 		order.POST("/classroom", api.OrderClassroom)
+	}
+	init := router.Group("/gin/init")
+	{
+		init.Use(middleware.LoginRequired())
+		init.Use(middleware.AdminRequired())
+		init.POST("/build", api.Buildinginit)
+		init.POST("/room", api.Roominit)
 	}
 
 	return router
