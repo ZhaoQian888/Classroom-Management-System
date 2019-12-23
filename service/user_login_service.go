@@ -3,7 +3,6 @@ package service
 import (
 	"Classroom-Management-System/information"
 	"Classroom-Management-System/model"
-	"fmt"
 )
 
 // UserInfo 用户的信息
@@ -31,7 +30,6 @@ func (u *UserLogInService) LogIn() (model.User, *information.Response) {
 	var user model.User
 	// 此处取出数据库中的用户信息，核对密码与信息然后返回一个用户模型
 	if err := model.DB.Where("username = ?", u.Username).First(&user).Error; err != nil {
-		fmt.Println(err)
 		return user, &information.Response{
 			Status: 11003,
 			Msg:    "用户名或者密码错误",

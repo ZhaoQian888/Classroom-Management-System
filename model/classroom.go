@@ -60,18 +60,20 @@ type Building struct {
 // ClassRoom 是一个教室实体
 type ClassRoom struct {
 	gorm.Model
-	Buildings  Building `gorm:"foreignkey:Building"`
-	Floor      uint8    `gorm:"not null"`
-	RoomNumber uint64   `gorm:"not null;index:addr"`
+	Buildings     Building `gorm:"foreignkey:BuildingRefer"`
+	BuildingRefer uint
+	Rs            []RoomStatus `gorm:"foreignkey:ClassRoomRefer;association_foreignkey:ID" `
+	Floor         uint8        `gorm:"not null"`
+	RoomNumber    uint64       `gorm:"not null;index:addr"`
 }
 
 // RoomStatus 代表教室当前的状态
 type RoomStatus struct {
 	gorm.Model
-	Room     ClassRoom `gorm:"foreignkey:ClassRoomRefer"`
-	Time     time.Time
-	TimeZone uint8
-	Status   uint8 `gorm:"default:'0'"`
+	ClassRoomRefer uint
+	Time           time.Time
+	TimeZone       uint8
+	Status         uint8 `gorm:"default:'0'"`
 }
 
 // Create 用来新建build
