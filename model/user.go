@@ -1,6 +1,7 @@
 package model
 
 import (
+	"Classroom-Management-System/information"
 	"strconv"
 	"strings"
 	"time"
@@ -51,4 +52,45 @@ func GetUser(id interface{}) (User, error) {
 	err := DB.Where("identity=?", id).First(&u)
 	return u, err.Error
 
+}
+
+//UserInfo 保存用户信息
+type UserInfo struct {
+	NickName string
+	UserName string
+	Class    string
+	History  []ClassRoomOrder
+	Email    string
+}
+
+// Info 返回用户信息
+func (u *User) Info() *information.Response {
+	var c ClassRoomOrder
+	count := 0
+	DB.Where("identity=?", u.Identity).Find(&c).Count(&count)
+	if count == 0 {
+		d := &UserInfo{
+			NickName: u.Nickname,
+			UserName: u.Username,
+			Class:    u.Class,
+			Email:    u.Email,
+		}
+		return &information.Response{
+			Status: 0,
+			Data:   d,
+		}
+	}
+	var cs []ClassRoomOrder
+	DB.Where("identity=?", u.Identity).Find(&cs)
+	d := &UserInfo{
+		NickName: u.Nickname,
+		UserName: u.Username,
+		Class:    u.Class,
+		Email:    u.Email,
+		History:  cs,
+	}
+	return &information.Response{
+		Status: 0,
+		Data:   d,
+	}
 }

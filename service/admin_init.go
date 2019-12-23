@@ -32,15 +32,15 @@ type RoomInit struct {
 // Init 初始化教室
 func (r *RoomInit) Init() *information.Response {
 	count := 0
-	model.DB.Where("buildingnumber=?", r.BuildingNumber).Count(&count)
+	var b model.Building
+	model.DB.Where("building_number=?", r.BuildingNumber).Find(&b).Count(&count)
 	if count == 0 {
 		return &information.Response{
 			Status: 50011,
 			Msg:    "教学楼不存在",
 		}
 	}
-	var b model.Building
-	model.DB.Where("buildingnumber=?", r.BuildingNumber).Find(&b)
+	model.DB.Where("building_number=?", r.BuildingNumber).Find(&b)
 	c := model.ClassRoom{
 		Floor:      r.Floor,
 		Buildings:  b,

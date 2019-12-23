@@ -2,7 +2,9 @@ package model
 
 import (
 	"Classroom-Management-System/information"
+	"fmt"
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 const unused uint8 = 0
@@ -12,11 +14,47 @@ type entity interface {
 	Ceate()
 }
 
+// RoomInfoRes 所有的教室信息
+type RoomInfoRes struct {
+	Cs []ClassRoom  `json:"cs"`
+	Rs []RoomStatus `json:"rs"`
+}
+
+// RoomModleInfo 返回当前所有的教室信息
+func RoomModleInfo() *information.Response {
+	css := []ClassRoom{}
+	rss := []RoomStatus{}
+	err := DB.Find(&css).Error
+	if err != nil {
+		return &information.Response{
+			Status: 60001,
+			Msg:    "数据库错误，请联系管理员",
+			Data:   err,
+		}
+	}
+	err = DB.Find(&rss).Error
+	if err != nil {
+		return &information.Response{
+			Status: 60001,
+			Msg:    "数据库错误，请联系管理员",
+			Data:   err,
+		}
+	}
+	rir := RoomInfoRes{
+		Cs: css,
+		Rs: rss,
+	}
+	return &information.Response{
+		Status: 0,
+		Data:   &rir,
+	}
+}
+
 // Building 是一个教学楼实体
 type Building struct {
 	gorm.Model
-	BuildingNumber uint8  `form:"building_number"  json:"building_number"  gorm:"primary_key" `
-	BuildingName   string `form:"building_name"    json:"building_name"    gorm:"not null"`
+	BuildingNumber uint8  `gorm:"index:addr" `
+	BuildingName   string `gorm:"not null"`
 }
 
 // ClassRoom 是一个教室实体
@@ -24,14 +62,14 @@ type ClassRoom struct {
 	gorm.Model
 	Buildings  Building `gorm:"foreignkey:Building"`
 	Floor      uint8    `gorm:"not null"`
-	RoomNumber uint64   `gorm:"primary_key;not null;index:addr"`
+	RoomNumber uint64   `gorm:"not null;index:addr"`
 }
 
 // RoomStatus 代表教室当前的状态
 type RoomStatus struct {
 	gorm.Model
 	Room     ClassRoom `gorm:"foreignkey:ClassRoomRefer"`
-	Time     uint64
+	Time     time.Time
 	TimeZone uint8
 	Status   uint8 `gorm:"default:'0'"`
 }
@@ -62,7 +100,8 @@ func (b *Building) Create() (information.Response, error) {
 // Create 用来新建教室
 func (c *ClassRoom) Create() *information.Response {
 	count := 0
-	DB.Where("BuildingNuber=?", c.RoomNumber).Count(&count)
+	var b Building
+	DB.Where("Building_Number=?", c.RoomNumber).Find(&b).Count(&count)
 	if count == 0 {
 		if err := DB.Create(&c).Error; err != nil {
 			return &information.Response{
@@ -70,6 +109,7 @@ func (c *ClassRoom) Create() *information.Response {
 				Msg:    "数据库错误，请联系管理员",
 			}
 		}
+		fmt.Print(c.Floor)
 		return &information.Response{
 			Status: 0,
 			Msg:    "创建成功",

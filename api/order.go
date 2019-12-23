@@ -24,7 +24,7 @@ func OrderClassroom(c *gin.Context) {
 				Msg:    "未找到用户存在",
 			})
 		}
-		user := u.(model.User)
+		user := u.(*model.User)
 		res := order.Order(user.Identity)
 		c.JSON(200, res)
 	}
