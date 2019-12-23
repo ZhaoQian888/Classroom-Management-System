@@ -38,10 +38,7 @@ func (u *UserLogInService) LogIn() (model.User, *information.Response) {
 		}
 	}
 	if user.CheckPassword(u.Password) {
-		return user, &information.Response{
-			Status: 0,
-			Msg:    "账号密码正确",
-		}
+		return user, nil
 	}
 	return user, &information.Response{
 		Status: 11004,
