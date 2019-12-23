@@ -1,4 +1,6 @@
 FROM gitpod/workspace-mysql
+RUN sudo apt-get -q update && # sudo apt-get install -yq bastet && # sudo apt-get install docker && # sudo rm -rf /var/libe/apt/lists/* 
+
                     
 USER gitpod
 
