@@ -2,6 +2,7 @@ package api
 
 import (
 	"Classroom-Management-System/information"
+	"Classroom-Management-System/model"
 	"Classroom-Management-System/service"
 
 	"github.com/gin-contrib/sessions"
@@ -82,4 +83,23 @@ func Quit(c *gin.Context) {
 		Status: 0,
 		Msg:    "注销成功",
 	})
+}
+
+// Status 返回当前状态
+func Status(c *gin.Context) {
+	u, ok := c.Get("user")
+	if !ok {
+		c.JSON(200, information.Response{
+			Status: 80001,
+			Msg:    "未登录",
+		})
+	} else {
+		user := u.(*model.User)
+		c.JSON(200, information.Response{
+			Status: 0,
+			Msg:    "用户以登录",
+			Data:   user,
+		})
+	}
+
 }

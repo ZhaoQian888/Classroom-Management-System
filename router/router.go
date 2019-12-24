@@ -18,7 +18,7 @@ func SetRouter() *gin.Engine {
 	router.Use(middleware.Cors())
 	router.Use(middleware.Session((os.Getenv("SESSION_SECRET"))))
 	router.Use(middleware.CurrentUser())
-
+	router.GET("/gin/status", api.Status)
 	user := router.Group("/gin/user")
 	{
 
