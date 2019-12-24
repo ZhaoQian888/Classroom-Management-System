@@ -2,6 +2,7 @@ package model
 
 import (
 	"Classroom-Management-System/information"
+	"fmt"
 	"log"
 	"time"
 
@@ -33,14 +34,23 @@ func dealwithfail(flag bool, tx *gorm.DB) {
 // Order 完成数据库层面的订单
 func (o *ClassRoomOrder) Order() (*information.Response, error) {
 	var cro ClassRoom
+	order := ClassRoomOrder{
+		RoomUser:    o.RoomUser,
+		OrderTime:   o.OrderTime,
+		UseTime:     o.UseTime,
+		UseTimeZone: o.UseTimeZone,
+		Identity:    o.Identity,
+		RoomNumber:  o.RoomNumber,
+	}
 	count := 0
 	tx := DB.Begin()
 	flag := false
 	defer dealwithfail(flag, tx)
-	err := tx.First(&cro, "room_number=?", o.RoomNumber).Count(&count).Error
+	err := tx.Where("room_number=?", o.RoomNumber).Find(&cro).Count(&count).Error
 	if err != nil {
 		flag = true
 	}
+	fmt.Print(count)
 	if count == 0 {
 		return &information.Response{
 			Status: 30004,
@@ -67,6 +77,7 @@ func (o *ClassRoomOrder) Order() (*information.Response, error) {
 			TimeZone:       o.UseTimeZone,
 			Status:         1,
 		}
+		tx.Create(&order)
 		tx.Create(&rs)
 		tx.Commit()
 		return &information.Response{
@@ -94,6 +105,7 @@ func (o *ClassRoomOrder) Order() (*information.Response, error) {
 	if err != nil {
 		flag = true
 	}
+	tx.Create(&order)
 	tx.Commit()
 	return &information.Response{
 		Status: 0,
