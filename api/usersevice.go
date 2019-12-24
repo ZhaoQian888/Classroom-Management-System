@@ -72,3 +72,14 @@ func UserRegister(c *gin.Context) {
 	}
 
 }
+
+// Quit 退出登录
+func Quit(c *gin.Context) {
+	s := sessions.Default(c)
+	s.Clear()
+	s.Save()
+	c.JSON(200, information.Response{
+		Status: 0,
+		Msg:    "注销成功",
+	})
+}

@@ -24,6 +24,7 @@ func SetRouter() *gin.Engine {
 
 		user.POST("/register", api.UserRegister)
 		user.POST("/login", api.UserLogin)
+		user.GET("/quit", api.Quit)
 	}
 	order := router.Group("/gin/order")
 	{
