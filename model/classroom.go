@@ -32,7 +32,7 @@ func RoomModleInfo() *information.Response {
 			Data:   err,
 		}
 	}
-	err = DB.Find(&rss).Error
+	err = DB.Where("Status=?", 1).Find(&rss).Error
 	if err != nil {
 		return &information.Response{
 			Status: 60001,
