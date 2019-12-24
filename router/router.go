@@ -12,7 +12,7 @@ import (
 func SetRouter() *gin.Engine {
 	router := gin.Default()
 
-	router.Use(gin.Logger())
+	// router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
 	router.Use(middleware.Cors())
@@ -38,6 +38,8 @@ func SetRouter() *gin.Engine {
 		init.Use(middleware.AdminRequired())
 		init.POST("/build", api.Buildinginit)
 		init.POST("/room", api.Roominit)
+		init.DELETE("/delete/room", api.DeleteRoom)
+		init.DELETE("/delete/build", api.DeleteBuild)
 	}
 	info := router.Group("/gin/info")
 	{

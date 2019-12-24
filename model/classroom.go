@@ -2,9 +2,9 @@ package model
 
 import (
 	"Classroom-Management-System/information"
-	"fmt"
-	"github.com/jinzhu/gorm"
 	"time"
+
+	"github.com/jinzhu/gorm"
 )
 
 const unused uint8 = 0
@@ -102,8 +102,7 @@ func (b *Building) Create() (information.Response, error) {
 // Create 用来新建教室
 func (c *ClassRoom) Create() *information.Response {
 	count := 0
-	var b Building
-	DB.Where("Building_Number=?", c.RoomNumber).Find(&b).Count(&count)
+	DB.Where("room_number=?", c.RoomNumber).Find(&c).Count(&count)
 	if count == 0 {
 		if err := DB.Create(&c).Error; err != nil {
 			return &information.Response{
@@ -111,7 +110,6 @@ func (c *ClassRoom) Create() *information.Response {
 				Msg:    "数据库错误，请联系管理员",
 			}
 		}
-		fmt.Print(c.Floor)
 		return &information.Response{
 			Status: 0,
 			Msg:    "创建成功",

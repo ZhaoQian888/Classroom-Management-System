@@ -21,3 +21,17 @@ func Roominit(c *gin.Context) {
 	}
 
 }
+
+// DeleteRoom 删除教室
+func DeleteRoom(c *gin.Context) {
+	var d service.RoomDelete
+	if err := c.ShouldBind(&d); err != nil {
+		c.JSON(200, information.Response{
+			Status: 90001,
+			Msg:    "删除序列化失败",
+		})
+	} else {
+		info := d.Delete()
+		c.JSON(200, info)
+	}
+}

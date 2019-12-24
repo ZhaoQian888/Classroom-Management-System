@@ -97,7 +97,7 @@ func Status(c *gin.Context) {
 		user := u.(*model.User)
 		c.JSON(200, information.Response{
 			Status: 0,
-			Msg:    "用户以登录",
+			Msg:    "用户已登录",
 			Data:   user,
 		})
 	}

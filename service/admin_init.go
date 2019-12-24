@@ -48,3 +48,51 @@ func (r *RoomInit) Init() *information.Response {
 	}
 	return c.Create()
 }
+
+// RoomDelete 删除教室
+type RoomDelete struct {
+	RoomNumber uint64 `form:"room_number" json:"room_number" binding:"required"`
+}
+
+// Delete 删除教室
+func (d *RoomDelete) Delete() *information.Response {
+	var r model.ClassRoom
+	count := 0
+	model.DB.Where("room_number=?", d.RoomNumber).Find(&r).Count(&count)
+	if count == 0 {
+		return &information.Response{
+			Status: 90002,
+			Msg:    "教室不存在",
+		}
+	}
+	model.DB.Where("room_number=?", d.RoomNumber).Delete(&model.ClassRoom{})
+	return &information.Response{
+		Status: 0,
+		Msg:    "删除成功",
+	}
+
+}
+
+// BuildingDelete 删除教学楼
+type BuildingDelete struct {
+	BuildingNumber uint8 `form:"building_number" json:"building_number" binding:"required"`
+}
+
+// Delete 删除教学楼
+func (d *BuildingDelete) Delete() *information.Response {
+	var m model.Building
+	count := 0
+	model.DB.Where("building_number=?", d.BuildingNumber).Find(&m).Count(&count)
+	if count == 0 {
+		return &information.Response{
+			Status: 90003,
+			Msg:    "教学楼不存在",
+		}
+	}
+	model.DB.Where("building_number=?", d.BuildingNumber).Delete(&model.Building{})
+	return &information.Response{
+		Status: 0,
+		Msg:    "教学楼删除成功",
+	}
+
+}

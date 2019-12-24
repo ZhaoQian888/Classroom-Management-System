@@ -20,3 +20,17 @@ func Buildinginit(c *gin.Context) {
 		c.JSON(200, *info)
 	}
 }
+
+// DeleteBuild 管理员删除教学楼
+func DeleteBuild(c *gin.Context) {
+	var build service.BuildingDelete
+	if err := c.ShouldBind(&build); err != nil {
+		c.JSON(200, information.Response{
+			Status: 40020,
+			Msg:    "序列化失败",
+		})
+	} else {
+		info := build.Delete()
+		c.JSON(200, *info)
+	}
+}
