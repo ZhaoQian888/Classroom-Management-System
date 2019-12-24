@@ -29,7 +29,6 @@ func SetRouter() *gin.Engine {
 	order := router.Group("/gin/order")
 	{
 		order.Use(middleware.LoginRequired())
-		order.Use(middleware.LoginRequired())
 		order.POST("/classroom", api.OrderClassroom)
 	}
 	init := router.Group("/gin/init")
