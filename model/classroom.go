@@ -50,21 +50,32 @@ func RoomModleInfo() *information.Response {
 	}
 }
 
+// BuildModelInfo 返回json
+func BuildModelInfo(id uint8) *information.Response {
+	var b Building
+	DB.Where("id=?", id).Find(&b)
+	return &information.Response{
+		Status: 0,
+		Msg:    "教学楼信息",
+		Data:   b,
+	}
+}
+
 // Building 是一个教学楼实体
 type Building struct {
 	gorm.Model
-	BuildingNumber uint8  `gorm:"index:addr" `
-	BuildingName   string `gorm:"not null"`
+	BuildingNumber uint8       `gorm:"index:addr;unique"`
+	BuildingName   string      `gorm:"not null"`
+	Cr             []ClassRoom `gorm:"foreignkey:BuildingRefer;association_foreignkey:BuildingNumber"`
 }
 
 // ClassRoom 是一个教室实体
 type ClassRoom struct {
 	gorm.Model
-	Buildings     Building `gorm:"foreignkey:BuildingRefer"`
 	BuildingRefer uint
-	Rs            []RoomStatus `gorm:"foreignkey:ClassRoomRefer;association_foreignkey:ID" `
+	Rs            []RoomStatus `gorm:"foreignkey:ClassRoomRefer;association_foreignkey:RoomNumber" `
 	Floor         uint8        `gorm:"not null"`
-	RoomNumber    uint64       `gorm:"not null;index:addr"`
+	RoomNumber    uint64       `gorm:"not null;index:addr;unique"`
 }
 
 // RoomStatus 代表教室当前的状态
@@ -79,7 +90,7 @@ type RoomStatus struct {
 // Create 用来新建build
 func (b *Building) Create() (information.Response, error) {
 	count := 0
-	DB.Where("BuildingNuber=?", b.BuildingNumber).Count(&count)
+	DB.Where("Building_number=?", b.BuildingNumber).Find(&Building{}).Count(&count)
 	if count == 0 {
 		if err := DB.Create(&b).Error; err != nil {
 			return information.Response{

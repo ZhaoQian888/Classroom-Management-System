@@ -2,7 +2,6 @@ package model
 
 import (
 	"Classroom-Management-System/information"
-	"fmt"
 	"log"
 	"time"
 
@@ -50,7 +49,6 @@ func (o *ClassRoomOrder) Order() (*information.Response, error) {
 	if err != nil {
 		flag = true
 	}
-	fmt.Print(count)
 	if count == 0 {
 		return &information.Response{
 			Status: 30004,

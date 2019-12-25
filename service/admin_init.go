@@ -13,12 +13,21 @@ type BuildingInit struct {
 
 // Init 管理员用来初始化教学楼
 func (b *BuildingInit) Init() *information.Response {
-	i := model.Building{
-		BuildingNumber: b.BuildingNumber,
-		BuildingName:   b.BuildingName,
+	count := 0
+	var m model.Building
+	model.DB.Where("building_number=?", b.BuildingNumber).Find(&m).Count(&count)
+	if count == 0 {
+		i := model.Building{
+			BuildingNumber: b.BuildingNumber,
+			BuildingName:   b.BuildingName,
+		}
+		info, _ := i.Create()
+		return &info
 	}
-	info, _ := i.Create()
-	return &info
+	return &information.Response{
+		Status: 90078,
+		Msg:    "教学楼已存在",
+	}
 
 }
 
@@ -42,9 +51,9 @@ func (r *RoomInit) Init() *information.Response {
 	}
 	model.DB.Where("building_number=?", r.BuildingNumber).Find(&b)
 	c := model.ClassRoom{
-		Floor:      r.Floor,
-		Buildings:  b,
-		RoomNumber: r.RoomNumber,
+		Floor:         r.Floor,
+		BuildingRefer: b.ID,
+		RoomNumber:    r.RoomNumber,
 	}
 	return c.Create()
 }

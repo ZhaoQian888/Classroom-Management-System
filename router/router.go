@@ -42,9 +42,11 @@ func SetRouter() *gin.Engine {
 	}
 	info := router.Group("/gin/info")
 	{
+
 		info.Use(middleware.LoginRequired())
 		info.GET("/myinfo", api.Myinfo)
 		info.GET("/roominfo", api.Roominfo)
+
 	}
 
 	return router
